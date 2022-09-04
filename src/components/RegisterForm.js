@@ -1,21 +1,20 @@
 import React, { useRef, useState } from 'react';
+import { Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { formInputs, validateInput } from '../common/handlers';
 import { UserAuth } from '../context/AuthContext';
 
 const RegisterForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(''); //tutorial
+  const [error, setError] = useState('');
   const emailRef = useRef('');
   const passwordRef = useRef('');
   const confirmPasswordRef = useRef('');
-  //   const [registerInformation, setRegisterInformation] = useState({
-  //     email: '',
-  //     password: '',
-  //     confirmPassword: '',
-  //   });
+  const [registerInformation, setRegisterInformation] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
   const [registerFormInputs, setRegisterFormInputs] = useState(formInputs);
   const navigate = useNavigate();
 
@@ -23,14 +22,17 @@ const RegisterForm = () => {
 
   const registerHandler = async e => {
     e.preventDefault();
+    if (registerInformation.password !== registerInformation.confirmPassword)
+      return alert('confirm password must be the same');
     setError('');
     try {
-      await createUser(email, password);
+      await createUser(registerInformation.email, registerInformation.password);
       navigate('/homepage');
     } catch (err) {
       setError(err.message);
       console.log(err.message);
     }
+    // finally{setLoading(false)}
   };
 
   return (
@@ -50,7 +52,10 @@ const RegisterForm = () => {
                 registerFormInputs.email.errors.length ? 'is-invalid' : ''
               }`}
               onChange={e => {
-                setEmail(e.target.value);
+                setRegisterInformation({
+                  ...registerInformation,
+                  email: e.target.value,
+                });
               }}
               onBlur={e => {
                 validateInput(emailRef.current, formInputs);
@@ -74,7 +79,12 @@ const RegisterForm = () => {
               className={`form-control mt-1 ${
                 registerFormInputs.password.errors.length ? 'is-invalid' : ''
               }`}
-              onChange={e => setPassword(e.target.value)}
+              onChange={e => {
+                setRegisterInformation({
+                  ...registerInformation,
+                  password: e.target.value,
+                });
+              }}
               onBlur={e => {
                 validateInput(passwordRef.current, registerFormInputs);
                 setRegisterFormInputs({ ...registerFormInputs });
@@ -86,34 +96,36 @@ const RegisterForm = () => {
               </div>
             ))}
           </div>
-          {/* <div className="form-group mt-3">
-        <label>{formInputs.confirmPassword.title}</label>
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Enter password"
-          defaultValue={registerFormInputs.confirmPassword.value}
-          ref={confirmPasswordRef}
-          className={`form-control mt-1 ${
-            registerFormInputs.confirmPassword.errors.length ? 'is-invalid' : ''
-          }`}
-          onChange={e =>
-            setRegisterInformation({
-              ...registerInformation,
-              confirmPassword: e.target.value,
-            })
-          }
-          onBlur={e => {
-            validateInput(confirmPasswordRef.current, registerFormInputs);
-            setRegisterFormInputs({ ...registerFormInputs });
-          }}
-        />
-        {formInputs.confirmPassword.errors.map((error, index) => (
-          <div className="invalid-feedback" key={index}>
-            {error}
+          <div className="form-group mt-3">
+            <label>{formInputs.confirmPassword.title}</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Enter password"
+              defaultValue={registerFormInputs.confirmPassword.value}
+              ref={confirmPasswordRef}
+              className={`form-control mt-1 ${
+                registerFormInputs.confirmPassword.errors.length
+                  ? 'is-invalid'
+                  : ''
+              }`}
+              onChange={e =>
+                setRegisterInformation({
+                  ...registerInformation,
+                  confirmPassword: e.target.value,
+                })
+              }
+              onBlur={e => {
+                validateInput(confirmPasswordRef.current, registerFormInputs);
+                setRegisterFormInputs({ ...registerFormInputs });
+              }}
+            />
+            {formInputs.confirmPassword.errors.map((error, index) => (
+              <div className="invalid-feedback" key={index}>
+                {error}
+              </div>
+            ))}
           </div>
-        ))}
-      </div> */}
           <div className="d-grid gap-2 mt-3">
             <button className="btn btn-primary">Register</button>
           </div>
