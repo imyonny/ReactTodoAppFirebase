@@ -1,9 +1,7 @@
-import { signInWithEmailAndPassword } from '@firebase/auth';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { UserAuth } from '../context/AuthContext';
-import { auth } from '../firebase';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -17,9 +15,10 @@ const LoginForm = () => {
     setError('');
     try {
       await signIn(email, password);
+      navigate('/homepage');
     } catch (err) {
       setError(err.message);
-      console.log(err.message);
+      alert(err.message);
     }
   };
 

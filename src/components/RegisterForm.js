@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { formInputs, validateInput } from '../common/handlers';
@@ -22,15 +21,19 @@ const RegisterForm = () => {
 
   const registerHandler = async e => {
     e.preventDefault();
-    if (registerInformation.password !== registerInformation.confirmPassword)
-      return alert('confirm password must be the same');
+    if (registerFormInputs.email.errors.length)
+      return alert(registerFormInputs.email.errors);
+    if (registerFormInputs.password.errors.length)
+      return alert(registerFormInputs.password.errors);
+    if (registerFormInputs.confirmPassword.errors.length)
+      return alert(registerFormInputs.confirmPassword.errors);
     setError('');
     try {
       await createUser(registerInformation.email, registerInformation.password);
       navigate('/homepage');
     } catch (err) {
       setError(err.message);
-      console.log(err.message);
+      alert(err.message);
     }
     // finally{setLoading(false)}
   };
@@ -56,6 +59,8 @@ const RegisterForm = () => {
                   ...registerInformation,
                   email: e.target.value,
                 });
+                validateInput(emailRef.current, registerFormInputs);
+                setRegisterFormInputs({ ...registerFormInputs });
               }}
               onBlur={e => {
                 validateInput(emailRef.current, formInputs);
@@ -84,6 +89,8 @@ const RegisterForm = () => {
                   ...registerInformation,
                   password: e.target.value,
                 });
+                validateInput(passwordRef.current, registerFormInputs);
+                setRegisterFormInputs({ ...registerFormInputs });
               }}
               onBlur={e => {
                 validateInput(passwordRef.current, registerFormInputs);
@@ -109,12 +116,14 @@ const RegisterForm = () => {
                   ? 'is-invalid'
                   : ''
               }`}
-              onChange={e =>
+              onChange={e => {
                 setRegisterInformation({
                   ...registerInformation,
                   confirmPassword: e.target.value,
-                })
-              }
+                });
+                validateInput(confirmPasswordRef.current, registerFormInputs);
+                setRegisterFormInputs({ ...registerFormInputs });
+              }}
               onBlur={e => {
                 validateInput(confirmPasswordRef.current, registerFormInputs);
                 setRegisterFormInputs({ ...registerFormInputs });

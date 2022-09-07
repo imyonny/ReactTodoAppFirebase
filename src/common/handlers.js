@@ -13,7 +13,10 @@ export const formInputs = {
   password: {
     title: 'Password',
     validations: {
-      pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
+      minLength: 6,
+      pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
+      required: true,
+      contain: true,
     },
     value: '',
     errors: [],
@@ -22,8 +25,8 @@ export const formInputs = {
   confirmPassword: {
     title: 'Confirm Password',
     validations: {
-      minLength: 8,
       required: true,
+      match: true,
     },
     value: '',
     errors: [],
@@ -41,16 +44,30 @@ export const validateInput = (inputEl, formInputs) => {
       formInput.errors.push(`Invalid ${formInput.title}`);
     }
   }
+  if (formInputValidations.contain) {
+    if (!inputEl.value.match(/([0-9].*[a-z])|([a-z].*[0-9])/)) {
+      formInputs.password.errors.push(
+        `Password must contain at least one letter and one number`
+      );
+    }
+  }
   if (formInputValidations.minLength) {
     if (inputEl.value.length < formInputValidations.minLength) {
       formInput.errors.push(
-        `${formInput.title} must be at least ${formInputValidations.minLength} `
+        `${formInput.title} must be at least ${formInputValidations.minLength} characters`
       );
     }
   }
   if (formInputValidations.required) {
     if (!inputEl.value) {
-      formInput.errors.push(`${formInput.title} must not be empty `);
+      formInput.errors.push(`${formInput.title} must not be empty`);
+    }
+  }
+  if (formInputValidations.match) {
+    if (formInputs.confirmPassword.value !== formInputs.password.value) {
+      formInputs.confirmPassword.errors.push(
+        `Confirm Password must match Password`
+      );
     }
   }
 };
