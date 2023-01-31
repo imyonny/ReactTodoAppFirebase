@@ -21,19 +21,25 @@ const RegisterForm = () => {
 
   const registerHandler = async e => {
     e.preventDefault();
-    if (registerFormInputs.email.errors.length)
-      return alert(registerFormInputs.email.errors);
-    if (registerFormInputs.password.errors.length)
-      return alert(registerFormInputs.password.errors);
-    if (registerFormInputs.confirmPassword.errors.length)
-      return alert(registerFormInputs.confirmPassword.errors);
+    // if (registerFormInputs.email.errors.length)
+    //   return alert(registerFormInputs.email.errors);
+    // if (registerFormInputs.password.errors.length)
+    //   return alert(registerFormInputs.password.errors);
+    // if (registerFormInputs.confirmPassword.errors.length)
+    //   return alert(registerFormInputs.confirmPassword.errors);
+    if (
+      registerFormInputs.email.errors.length ||
+      registerFormInputs.password.errors.length ||
+      registerFormInputs.confirmPassword.errors.length
+    )
+      return;
     setError('');
     try {
       await createUser(registerInformation.email, registerInformation.password);
       navigate('/homepage');
     } catch (err) {
       setError(err.message);
-      alert(err.message);
+      console.log(err.message);
     }
     // finally{setLoading(false)}
   };

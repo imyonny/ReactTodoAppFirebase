@@ -1,6 +1,6 @@
 import { Route, Routes, Navigate } from 'react-router';
 import './App.css';
-import Homepage from './Homepage';
+import Homepage from './components/Homepage';
 import Welcome from './Welcome';
 import Layout from './components/Layout/Layout';
 import { AuthContextProvider } from './context/AuthContext';

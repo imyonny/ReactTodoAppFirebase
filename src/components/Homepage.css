@@ -17,20 +17,20 @@
   border-radius: 0;
 }
 
-.list-group-item i.fa-square {
+.list-group-item i.bi-square {
   flex-grow: 0;
   cursor: pointer;
   order: 1;
 }
 
-.list-group-item i.fa-trash-alt {
+.list-group-item i.bi-trash-fill {
   flex-grow: 0;
   cursor: pointer;
   color: #dc3545;
   order: 3;
 }
 
-.list-group-item i.fa-trash-alt:hover {
+.list-group-item i.bi-trash-fill:hover {
   color: #af1e2c;
 }
 
@@ -39,7 +39,7 @@
   margin: 0 10px;
   order: 2;
 }
-i.fa-check-square {
+i.bi-check-square {
   flex-grow: 0;
   cursor: pointer;
   color: #28a745;

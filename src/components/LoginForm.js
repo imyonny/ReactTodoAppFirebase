@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { UserAuth } from '../context/AuthContext';
@@ -18,7 +19,7 @@ const LoginForm = () => {
       navigate('/homepage');
     } catch (err) {
       setError(err.message);
-      alert(err.message);
+      Alert(err.message);
     }
   };
 
